@@ -117,7 +117,6 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
   if (showOutcome) {
     // First we need to pass over only the successful guesses
     // so that they can be shown in green without worrying about ordering
-
     for (const [char, charIndex] of /** @type {[string, number][]} */ (
       [...word]
         .map((c, i) => [c, i])
