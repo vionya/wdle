@@ -1,7 +1,5 @@
-import { KeyboardDataParams } from './types/keyboard';
 import './keyboard.css';
-import React from 'react';
-import { KeyParams } from './types/keyboard';
+import { KeyParams, KeyboardDataParams } from './types/keyboard';
 
 // Map the available keys and their corresponding codes
 const QWERTY_KEYS = [

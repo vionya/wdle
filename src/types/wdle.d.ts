@@ -9,4 +9,5 @@ export interface RowParams {
   idx: number;
   activeIdx: number;
   setActiveIdx: React.Dispatch<React.SetStateAction<number>>;
-}
+}export type HandlerCallback<T> = (event: any) => T;
+

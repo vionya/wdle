@@ -1,20 +1,18 @@
-import './wdle.css';
-import React, { useRef, useEffect, useState } from 'react';
-import wordData from './data/words_list.json';
-import validWords from './data/valid_words_list.json';
-import { OnScreenKeyboard } from './keyboard';
+import React, { useEffect, useRef, useState } from 'react';
 import yippee from './assets/yippee.gif';
-import { RowData, RowParams } from './types/wdle';
+import validWords from './data/valid_words_list.json';
+import wordData from './data/words_list.json';
+import { OnScreenKeyboard } from './keyboard';
+import { HandlerCallback, RowData, RowParams } from './types/wdle';
+import './wdle.css';
 
 // Taken from stackoverflow
 function useEventListener(
   eventName: string,
-  // @ts-ignore
   handler: HandlerCallback<void>,
   element = window
 ) {
-  /** @type {React.MutableRefObject<typeof handler>} */
-  const savedHandler: React.MutableRefObject<typeof handler> = useRef();
+  const savedHandler = useRef<typeof handler>();
 
   useEffect(() => {
     savedHandler.current = handler;
@@ -24,9 +22,8 @@ function useEventListener(
     const isSupported = element && element.addEventListener;
     if (!isSupported) return;
 
-    /** @type {typeof handler} */
     const eventListener: typeof handler = (event: any) =>
-      savedHandler.current(event);
+      savedHandler.current!(event);
 
     element.addEventListener(eventName, eventListener);
 
