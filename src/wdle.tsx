@@ -219,7 +219,6 @@ function WdleRoot() {
   useEffect(() => {
     setWord(wordData[Math.floor(Math.random() * wordData.length)]);
   }, [resetVar]);
-  console.log(word);
 
   const numRows = 6;
   const [rowData, setRowData] = useState<Rows>(
