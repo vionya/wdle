@@ -111,17 +111,22 @@ body {
 }
 
 /* Base styling for fake buttons */
-.button {
+button {
   color: white;
+  border: 1px solid var(--fg);
   background-color: grey;
   text-align: center;
   padding: 3px;
+  margin: 3px;
+  width: 45%;
+  height: 2rem;
+  display: inline-block;
 }
 
 /* Button hover styling */
-.button:hover {
+button:hover {
   cursor: pointer;
-  background-color: rgb(158, 158, 158);
+  opacity: 75%;
 }
 
 /* When the modal is for success, color header to green */

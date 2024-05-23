@@ -1,5 +1,5 @@
 import './keyboard.css';
-import { KeyParams, KeyboardDataParams } from './types/keyboard';
+import { KeyParams, KeyboardDataParams } from './types/keyboard.d';
 
 // Map the available keys and their corresponding codes
 const QWERTY_KEYS = [
