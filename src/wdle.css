@@ -1,5 +1,17 @@
 :root {
-  background-color: black;
+  --bg: white;
+  --fg: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: black;
+    --fg: white;
+  }
+}
+
+body {
+  background-color: var(--bg);
 }
 
 /* Root setup */
@@ -24,7 +36,7 @@
 #wdleTitle {
   height: fit-content;
   text-align: center;
-  color: white;
+  color: var(--fg);
 }
 
 /* Title text children need no margin, otherwise a bunch of space is wasted */
@@ -53,7 +65,7 @@
 
 /* Base grid styles */
 .wdleGameRoot {
-  background-color: black;
+  background-color: var(--bg);
 
   display: grid;
   align-items: center;
@@ -64,16 +76,16 @@
 
 /* Set opacity of everything behind completion modal to 70% */
 .completed {
-  opacity: 70%;
+  opacity: 50%;
 }
 
 /* Modal styling */
 .wdleRootCompletionModal {
   position: absolute;
 
-  background-color: black;
-  border: 1px solid white;
-  color: white;
+  background-color: var(--bg);
+  border: 1px solid var(--fg);
+  color: var(--fg);
 
   display: flex;
   flex-direction: column;
@@ -146,7 +158,7 @@ h1.wdleRootFailure {
 .baseGuess {
   background-color: rgb(102, 102, 102);
   color: white;
-  border: 1px solid black;
+  border: 1px solid var(--bg);
 
   font-weight: bolder;
   font-size: 20px;
