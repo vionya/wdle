@@ -1,25 +1,20 @@
-import "./wdle.css";
-import React, { useRef, useEffect, useState } from "react";
-import wordData from "./data/words_list.json";
-import validWords from "./data/valid_words_list.json";
-import { OnScreenKeyboard } from "./keyboard";
-import yippee from "./assets/yippee.gif";
-
-/**
- * @template T
- * @callback HandlerCallback
- * @param {Event} event
- * @return {T}
- */
+import './wdle.css';
+import React, { useRef, useEffect, useState } from 'react';
+import wordData from './data/words_list.json';
+import validWords from './data/valid_words_list.json';
+import { OnScreenKeyboard } from './keyboard';
+import yippee from './assets/yippee.gif';
+import { RowData, RowParams } from './types/wdle';
 
 // Taken from stackoverflow
-/**
- * @param {string} eventName
- * @param {HandlerCallback<void>} handler
- */
-function useEventListener(eventName, handler, element = window) {
+function useEventListener(
+  eventName: string,
+  // @ts-ignore
+  handler: HandlerCallback<void>,
+  element = window
+) {
   /** @type {React.MutableRefObject<typeof handler>} */
-  const savedHandler = useRef();
+  const savedHandler: React.MutableRefObject<typeof handler> = useRef();
 
   useEffect(() => {
     savedHandler.current = handler;
@@ -30,7 +25,8 @@ function useEventListener(eventName, handler, element = window) {
     if (!isSupported) return;
 
     /** @type {typeof handler} */
-    const eventListener = (event) => savedHandler.current(event);
+    const eventListener: typeof handler = (event: any) =>
+      savedHandler.current(event);
 
     element.addEventListener(eventName, eventListener);
 
@@ -40,43 +36,33 @@ function useEventListener(eventName, handler, element = window) {
   }, [eventName, element]);
 }
 
-/**
- * @typedef { { [key: number]: {guess: string} } } RowData
-
- * @typedef {Object} RowParams
- * @property {RowData} rowData
- * @property {React.Dispatch<React.SetStateAction<RowData>>} setRowData
- * @property {string} word
- * @property {number} idx
- * @property {number} activeIdx
- * @property {React.Dispatch<React.SetStateAction<number>>} setActiveIdx
- */
-
-/**
- * @param {RowParams}
- * @return {React.ReactElement}
- */
-function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
+function WdleRow({
+  rowData,
+  setRowData,
+  word,
+  idx,
+  activeIdx,
+  setActiveIdx
+}: RowParams): React.ReactElement {
   // If this is the currently active row
   const active = activeIdx === idx,
     // If the outcome should be displayed
     showOutcome =
       rowData[idx].guess.length === 5 && (activeIdx > idx || activeIdx === -1),
     // The main className, depending on whether the row is active or not
-    mainClassName = "wdleRow " + (active ? "rowActive" : "");
+    mainClassName = 'wdleRow ' + (active ? 'rowActive' : '');
 
-  /** @param {KeyboardEvent} */
-  function handler({ key }) {
+  function handler({ key }: KeyboardEvent) {
     let newGuess = rowData[idx].guess;
 
-    if (key === "Backspace") {
+    if (key === 'Backspace') {
       // If backspace was pressed, remove the last character
       newGuess = newGuess.slice(0, rowData[idx].guess.length - 1);
     } else if (/^[A-Za-z]$/gi.test(key)) {
       // If the keycode is alpha, add the character
       newGuess = (rowData[idx].guess + key).toLowerCase();
     } else if (
-      key === "Enter" &&
+      key === 'Enter' &&
       rowData[idx].guess.length === 5 &&
       validWords.includes(newGuess.toLowerCase())
     ) {
@@ -90,7 +76,7 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
     }
   }
 
-  useEventListener("keydown", handler);
+  useEventListener('keydown', handler);
 
   // It's been modified by now so we can just assign to it
   const guess = rowData[idx].guess;
@@ -108,9 +94,9 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
       i,
       showOutcome ? null : (
         <div key={`${i}`} className={`baseGuess wdleGuessBad`}>
-          {guess.charAt(i).toUpperCase() || " "}
+          {guess.charAt(i).toUpperCase() || ' '}
         </div>
-      ),
+      )
     ])
   );
 
@@ -118,11 +104,12 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
   if (showOutcome) {
     // First we need to pass over only the successful guesses
     // so that they can be shown in green without worrying about ordering
-    for (const [char, charIndex] of /** @type {[string, number][]} */ (
-      [...word]
-        .map((c, i) => [c, i])
-        .filter((_, i) => word.charAt(i) === guess.charAt(i))
-    )) {
+    for (const [char, charIndex] of [...word]
+      .map((c, i) => [c, i])
+      .filter((_, i) => word.charAt(i) === guess.charAt(i)) as [
+      string,
+      number
+    ][]) {
       uiEntries[charIndex] = (
         <div key={`${char}-${charIndex}`} className={`baseGuess wdleGuessGood`}>
           {char.toUpperCase()}
@@ -133,20 +120,20 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
     }
 
     // Now we iterate over every other character in the guess
-    [...guess, ..." ".repeat(5 - guess.length)].forEach((char, charIndex) => {
+    [...guess, ...' '.repeat(5 - guess.length)].forEach((char, charIndex) => {
       // If the index already has been modified as successful, we ignore it
       if (uiEntries[charIndex] !== null) return;
 
-      let className = "wdleGuess";
+      let className = 'wdleGuess';
 
       if (word.includes(char) && charData[char] > 0) {
         // If the word includes the guessed character and there are 1 or more uses
         // of the character remaining, we mark it as a "close" guess (orange)
-        className += "Close";
+        className += 'Close';
         charData[char] -= 1;
       } else {
         // In any other case, it's a "bad" guess and colored grey
-        className += "Bad";
+        className += 'Bad';
       }
 
       uiEntries[charIndex] = (
@@ -163,10 +150,8 @@ function WdleRow({ rowData, setRowData, word, idx, activeIdx, setActiveIdx }) {
 }
 
 function WdleRoot() {
-  const [word, setWord] = useState("");
-  const [usedChars, setUsedChars] = useState(
-    /** @type {Set<string>} */ (new Set([]))
-  );
+  const [word, setWord] = useState('');
+  const [usedChars, setUsedChars] = useState<Set<string>>(new Set([]));
 
   const [resetVar, setReset] = useState(false);
 
@@ -177,10 +162,8 @@ function WdleRoot() {
 
   const numRows = 6;
   const [rowData, setRowData] = useState(
-    /** @type {RowData}} */ (
-      Object.fromEntries(
-        [...Array(numRows).keys()].map((k) => [k, { guess: "" }])
-      )
+    /** @type {RowData}} */ Object.fromEntries(
+      [...Array(numRows).keys()].map((k) => [k, { guess: '' }])
     )
   );
   const [active, setActive] = useState(0);
@@ -194,7 +177,7 @@ function WdleRoot() {
     // Reset row data
     setRowData(
       Object.fromEntries(
-        [...Array(numRows).keys()].map((k) => [k, { guess: "" }])
+        [...Array(numRows).keys()].map((k) => [k, { guess: '' }])
       )
     );
     // Trigger word reset
@@ -202,8 +185,7 @@ function WdleRoot() {
   };
 
   // Generate {numRows} rows
-  /** @type {React.ReactElement[]} */
-  const rows = [];
+  const rows: React.ReactElement[] = [];
   for (let i = 0; i < numRows; i++) {
     rows.push(
       <WdleRow
@@ -255,7 +237,7 @@ function WdleRoot() {
         <p>"like wordle, but worse"</p>
       </div>
 
-      <div className={"wdleGameRoot" + (isCompleted() ? " completed" : "")}>
+      <div className={'wdleGameRoot' + (isCompleted() ? ' completed' : '')}>
         <div className="wdleGridRoot">{rows}</div>
       </div>
 
@@ -299,10 +281,7 @@ function WdleRoot() {
         word={word}
         submittedGuesses={Object.values(rowData)
           .slice(0, active === -1 ? Object.keys(rowData).length : active)
-          .map(
-            (/** @type {import('./types').PropertyOf<RowData>} */ row) =>
-              row.guess
-          )}
+          .map((row: import('./types/wdle').PropertyOf<RowData>) => row.guess)}
         done={isCompleted()}
       />
     </>
