@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import wordData from "./data/words_list.json";
 import validWords from "./data/valid_words_list.json";
 import { OnScreenKeyboard } from "./keyboard";
+import yippee from "./assets/yippee.gif";
 
 /**
  * @template T
@@ -263,6 +264,11 @@ function WdleRoot() {
           {active === -1 && (
             <>
               <h1 className="wdleRootSuccess">You got it!</h1>
+              <img
+                className="yippee"
+                src={yippee}
+                alt="autism creature, YIPPEE"
+              />
               <p>You used {guesses.length} turn(s)</p>
             </>
           )}

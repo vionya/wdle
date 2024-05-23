@@ -87,8 +87,10 @@
   margin: auto;
 
   width: fit-content;
+  max-width: 80%;
   height: fit-content;
   padding: 10px;
+  z-index: 1001;
 }
 
 .wdleRootCompletionModal > h1 {
@@ -113,6 +115,12 @@
 /* When the modal is for success, color header to green */
 h1.wdleRootSuccess {
   color: green;
+}
+
+img.yippee {
+  width: 50%;
+  height: auto;
+  align-self: center;
 }
 
 /* Otherwise, color header red */
