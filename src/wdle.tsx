@@ -293,7 +293,7 @@ function WdleRoot() {
   return (
     <>
       <div id="wdleTitle">
-        <h1>wdle 7.0</h1>
+        <h1>wdle</h1>
         <p>"like wordle, but worse"</p>
       </div>
 
